@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="UNAL_diner"
-run/main_scene="uid://du1wprf08by3g"
+run/main_scene="uid://b4vbs7ifm52fp"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://b4vbs7ifm52fp"]
+
+[ext_resource type="Script" uid="uid://cmr5tlx1igexp" path="res://scripts/ui/MenuPrincipal.gd" id="1_ffwdg"]
+
+[node name="MenuPrincipal" type="Control" unique_id=190292713]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ffwdg")
+
+[node name="FondoRespaldo" type="ColorRect" parent="." unique_id=527205015]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.105882354, 0.14901961, 0.19215687, 1)
+
+[node name="ImagenPortada" type="TextureRect" parent="." unique_id=1186313845]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+
+[node name="LabelTitulo" type="Label" parent="." unique_id=294182787]
+layout_mode = 0
+offset_left = 226.0
+offset_top = 110.0
+offset_right = 926.0
+offset_bottom = 270.0
+theme_override_font_sizes/font_size = 48
+text = "UNAL DINER
+MesaFlow Game Edition"
+
+[node name="BtnEmpezar" type="Button" parent="." unique_id=1068776179]
+layout_mode = 0
+offset_left = 446.0
+offset_top = 430.0
+offset_right = 706.0
+offset_bottom = 500.0
+theme_override_font_sizes/font_size = 28
+text = "EMPEZAR"
