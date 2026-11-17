@@ -1,0 +1,8 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+*.translation
+
+# Archivos temporales del sistema operativo
+.DS_Store
+Thumbs.db

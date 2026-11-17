@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://mj174aberiwf"]
+
+[ext_resource type="Script" uid="uid://cahdtesx2x7cd" path="res://scripts/ui/MesaVisual.gd" id="1_ambpr"]
+
+[node name="MesaVisual" type="Control" unique_id=93241786]
+custom_minimum_size = Vector2(118, 120)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -992.0
+offset_bottom = -518.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ambpr")
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=792442086]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelInfo" type="Label" parent="." unique_id=222318966]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 150.0
+offset_bottom = 90.0
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="BarraPaciencia" type="ProgressBar" parent="." unique_id=1259690744]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 88.0
+offset_right = 110.0
+offset_bottom = 115.0

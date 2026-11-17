@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://dcl7wt3wna8pv"]
+
+[ext_resource type="Script" uid="uid://bky1ijssujmow" path="res://scripts/ui/ComensalVisual.gd" id="1_b3ry3"]
+
+[node name="ComensalVisual" type="Control" unique_id=386635534]
+custom_minimum_size = Vector2(150, 30)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1002.0
+offset_bottom = -618.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b3ry3")
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=601512412]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelNombre" type="Label" parent="." unique_id=594362149]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 1.0
+offset_right = 146.0
+offset_bottom = 24.0
+theme_override_font_sizes/font_size = 11
+
+[node name="Avatar" type="ColorRect" parent="." unique_id=1638630819]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 26.0
+offset_bottom = 26.0
+
+[node name="BarraPaciencia" type="ProgressBar" parent="." unique_id=1720474350]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 18.0
+offset_right = 146.0
+offset_bottom = 27.0
+show_percentage = false
