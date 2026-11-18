@@ -1,6 +1,92 @@
 [gd_scene format=3 uid="uid://b4vbs7ifm52fp"]
 
-[ext_resource type="Script" uid="uid://cmr5tlx1igexp" path="res://scripts/ui/MenuPrincipal.gd" id="1_ffwdg"]
+[ext_resource type="Script" uid="uid://78hifdc6h20i" path="res://scripts/menu_principal.gd" id="1_ysajj"]
+[ext_resource type="Texture2D" uid="uid://c8ffukx8srcsj" path="res://assets/fondos/UNAL-diner-portada.png" id="2_q4epk"]
+[ext_resource type="Texture2D" uid="uid://bmgxiunmun3hl" path="res://assets/MesasPrueba.png" id="3_cjknc"]
+[ext_resource type="Texture2D" uid="uid://o5j6jagbcvgd" path="res://icon.svg" id="4_f5jwn"]
+[ext_resource type="FontFile" uid="uid://b4bbbro7mbquu" path="res://assets/fonts/PressStart2P-Regular.ttf" id="5_f5jwn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ytrl"]
+bg_color = Color(0.972549, 0.5019608, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 8
+border_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f5jwn"]
+bg_color = Color(1, 0.627451, 0.101960786, 1)
+border_width_left = 4
+border_width_top = 8
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4o3yp"]
+bg_color = Color(1, 0.627451, 0.101960786, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 8
+border_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n8p0c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4togl"]
+bg_color = Color(0.972549, 0.5019608, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 8
+border_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iiinc"]
+bg_color = Color(1, 0.627451, 0.101960786, 1)
+border_width_left = 4
+border_width_top = 8
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n8p0c"]
+bg_color = Color(1, 0.627451, 0.101960786, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 8
+border_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f5jwn"]
 
 [node name="MenuPrincipal" type="Control" unique_id=190292713]
 layout_mode = 3
@@ -9,41 +95,112 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_ffwdg")
+script = ExtResource("1_ysajj")
+ruta_escena_juego = "uid://du1wprf08by3g"
+diapositivas = Array[Texture2D]([ExtResource("2_q4epk"), ExtResource("3_cjknc"), ExtResource("4_f5jwn")])
 
-[node name="FondoRespaldo" type="ColorRect" parent="." unique_id=527205015]
+[node name="FondoPortada" type="TextureRect" parent="." unique_id=1186313845]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.105882354, 0.14901961, 0.19215687, 1)
-
-[node name="ImagenPortada" type="TextureRect" parent="." unique_id=1186313845]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+texture = ExtResource("2_q4epk")
 expand_mode = 1
 
-[node name="LabelTitulo" type="Label" parent="." unique_id=294182787]
+[node name="ContenedorBotones" type="HBoxContainer" parent="." unique_id=1841053644]
 layout_mode = 0
-offset_left = 226.0
-offset_top = 110.0
-offset_right = 926.0
-offset_bottom = 270.0
-theme_override_font_sizes/font_size = 48
-text = "UNAL DINER
-MesaFlow Game Edition"
+offset_left = 396.0
+offset_top = 535.0
+offset_right = 776.0
+offset_bottom = 590.0
+theme_override_constants/separation = 24
 
-[node name="BtnEmpezar" type="Button" parent="." unique_id=1068776179]
-layout_mode = 0
-offset_left = 446.0
-offset_top = 430.0
-offset_right = 706.0
-offset_bottom = 500.0
-theme_override_font_sizes/font_size = 28
+[node name="BtnEmpezar" type="Button" parent="ContenedorBotones" unique_id=478488606]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("5_f5jwn")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_8ytrl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_f5jwn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4o3yp")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_n8p0c")
 text = "EMPEZAR"
+
+[node name="BtnTutorial" type="Button" parent="ContenedorBotones" unique_id=616997803]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0.050980393, 0.07450981, 0.14901961, 1)
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = ExtResource("5_f5jwn")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_4togl")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_iiinc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n8p0c")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_f5jwn")
+text = "TUTORIAL"
+
+[node name="OverlayTutorial" type="Control" parent="." unique_id=1254916136]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FondoOscuro" type="ColorRect" parent="OverlayTutorial" unique_id=747296516]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.78431374)
+
+[node name="ImagenDiapositiva" type="TextureRect" parent="OverlayTutorial" unique_id=2009134667]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 45.0
+offset_right = 1076.0
+offset_bottom = 563.0
+expand_mode = 1
+stretch_mode = 5
+
+[node name="BtnAnterior" type="Button" parent="OverlayTutorial" unique_id=1169005029]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 578.0
+offset_right = 276.0
+offset_bottom = 623.0
+text = "< ANTERIOR"
+
+[node name="BtnSiguiente" type="Button" parent="OverlayTutorial" unique_id=1856695033]
+layout_mode = 0
+offset_left = 876.0
+offset_top = 578.0
+offset_right = 1036.0
+offset_bottom = 623.0
+text = "SIGUIENTE >"
+
+[node name="BtnCerrar" type="Button" parent="OverlayTutorial" unique_id=621275319]
+layout_mode = 0
+offset_left = 916.0
+offset_top = 15.0
+offset_right = 1036.0
+offset_bottom = 50.0
+text = "X CERRAR"
+
+[node name="LabelContador" type="Label" parent="OverlayTutorial" unique_id=771756689]
+layout_mode = 0
+offset_left = 526.0
+offset_top = 585.0
+offset_right = 626.0
+offset_bottom = 615.0
+text = "1 / 3"
+horizontal_alignment = 1

@@ -92,8 +92,8 @@ func _cargar_nivel(indice: int) -> void:
 	
 	var total_mesas: int = config["mesas"]
 	var centro_salon := Vector2(565.0, 330.0)
-	var radio_x := 250.0
-	var radio_y := 170.0
+	var radio_x := 265.0
+	var radio_y := 180.0
 	
 	for i in range(1, total_mesas + 1):
 		var nueva_mesa := Mesa.new(i)
@@ -105,7 +105,8 @@ func _cargar_nivel(indice: int) -> void:
 		
 		var angulo := (TAU / total_mesas) * (i - 1) - (PI / 2.0)
 		var posicion_mesa := centro_salon + Vector2(cos(angulo) * radio_x, sin(angulo) * radio_y)
-		vista_mesa.position = posicion_mesa - Vector2(59.0, 60.0)
+		# Centrado dinámico según el nuevo tamaño que le diste en el Inspector
+		vista_mesa.position = posicion_mesa - (vista_mesa.size * 0.5)
 		
 		mesas_visuales.append(vista_mesa)
 		vista_mesa.mesa_clickeada.connect(_on_clic_mesa)
