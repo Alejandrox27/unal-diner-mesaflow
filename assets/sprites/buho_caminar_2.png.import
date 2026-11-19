@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbhpkqbtulml0"
-path="res://.godot/imported/PIE-IZQUIERDO.png-a14ff406c63b8f658f07887404ffe37b.ctex"
+uid="uid://67rnsln0qtrd"
+path="res://.godot/imported/buho_caminar_2.png-1dd970d67426059c6545c369c6811871.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/PIE-IZQUIERDO.png"
-dest_files=["res://.godot/imported/PIE-IZQUIERDO.png-a14ff406c63b8f658f07887404ffe37b.ctex"]
+source_file="res://assets/sprites/buho_caminar_2.png"
+dest_files=["res://.godot/imported/buho_caminar_2.png-1dd970d67426059c6545c369c6811871.ctex"]
 
 [params]
 

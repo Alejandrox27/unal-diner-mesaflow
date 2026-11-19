@@ -6,6 +6,8 @@ signal destino_alcanzado(accion_pendiente: Dictionary)
 enum EstadoVisual { LIBRE, CON_COMIDA, SUCIOS_1, SUCIOS_2, SUCIOS_3 }
 
 @export var velocidad: float = 360.0
+@export var factor_escala_caminar: float = 0.55
+@export var factor_escala_caminar_cargando: float = 1.0
 
 @onready var animacion: AnimatedSprite2D = $AnimatedSprite2D
 @onready var plato_comida: Sprite2D = $AnimatedSprite2D/PlatoComida
@@ -19,13 +21,17 @@ var moviendose: bool = false
 var accion_pendiente: Dictionary = {}
 var offset_x_platos: float = 0.0
 var esta_cargando: bool = false
+var pos_base_sprite: Vector2 = Vector2.ZERO
+var escala_base: Vector2 = Vector2.ONE
 
 func _ready() -> void:
 	destino = global_position
+	escala_base = animacion.scale
+	pos_base_sprite = animacion.position
 	offset_x_platos = plato_comida.position.x
 	cambiar_estado_visual(EstadoVisual.LIBRE, "Manos libres")
 	_reproducir_animacion("quieto")
-
+	
 func ir_a(punto: Vector2, accion: Dictionary = {}) -> void:
 	destino = punto
 	accion_pendiente = accion
@@ -33,6 +39,7 @@ func ir_a(punto: Vector2, accion: Dictionary = {}) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if not moviendose:
+		animacion.position = pos_base_sprite
 		_reproducir_animacion("quieto")
 		return
 		
@@ -41,6 +48,7 @@ func _physics_process(_delta: float) -> void:
 		global_position = destino
 		velocity = Vector2.ZERO
 		moviendose = false
+		animacion.position = pos_base_sprite
 		_reproducir_animacion("quieto")
 		var accion_ejecutar := accion_pendiente.duplicate()
 		accion_pendiente.clear()
@@ -50,16 +58,19 @@ func _physics_process(_delta: float) -> void:
 		var direccion := global_position.direction_to(destino)
 		velocity = direccion * velocidad
 		_actualizar_orientacion_y_animacion(direccion)
+		# Eleva 2 px el sprite en el fotograma 1 para marcar el paso
+		animacion.position.y = pos_base_sprite.y - (2.0 if animacion.frame == 1 else 0.0)
 		move_and_slide()
 
 func _actualizar_orientacion_y_animacion(direccion: Vector2) -> void:
+	if direccion.x < -0.05:
+		animacion.flip_h = true
+		_actualizar_lado_platos(-1.0)
+	elif direccion.x > 0.05:
+		animacion.flip_h = false
+		_actualizar_lado_platos(1.0)
+		
 	if abs(direccion.x) >= abs(direccion.y):
-		if direccion.x < 0:
-			animacion.flip_h = true
-			_actualizar_lado_platos(-1.0)
-		elif direccion.x > 0:
-			animacion.flip_h = false
-			_actualizar_lado_platos(1.0)
 		_reproducir_animacion("caminar")
 	else:
 		if direccion.y < 0:
@@ -71,19 +82,35 @@ func _reproducir_animacion(base: String) -> void:
 	if not animacion.sprite_frames:
 		return
 		
-	# Si lleva platos, busca primero la versión "_cargando" (ej. "quieto_cargando")
-	var nombre_objetivo := base + "_cargando" if esta_cargando else base
+	var es_movimiento := base.begins_with("caminar")
+	var objetivo := base + "_cargando" if esta_cargando else base
+	var respaldo_mov := "caminar_cargando" if esta_cargando else "caminar"
+	var respaldo_quieto := "quieto_cargando" if esta_cargando else "quieto"
 	
-	if animacion.sprite_frames.has_animation(nombre_objetivo):
-		if animacion.animation != nombre_objetivo or not animacion.is_playing():
-			animacion.play(nombre_objetivo)
+	var anim_final := ""
+	if animacion.sprite_frames.has_animation(objetivo):
+		anim_final = objetivo
 	elif animacion.sprite_frames.has_animation(base):
-		if animacion.animation != base or not animacion.is_playing():
-			animacion.play(base)
-	else:
-		var fallback := "quieto_cargando" if (esta_cargando and animacion.sprite_frames.has_animation("quieto_cargando")) else "quieto"
-		if animacion.sprite_frames.has_animation(fallback) and animacion.animation != fallback:
-			animacion.play(fallback)
+		anim_final = base
+	elif es_movimiento and animacion.sprite_frames.has_animation(respaldo_mov):
+		anim_final = respaldo_mov
+	elif es_movimiento and animacion.sprite_frames.has_animation("caminar"):
+		anim_final = "caminar"
+	elif animacion.sprite_frames.has_animation(respaldo_quieto):
+		anim_final = respaldo_quieto
+	elif animacion.sprite_frames.has_animation("quieto"):
+		anim_final = "quieto"
+		
+	if anim_final != "":
+		if anim_final == "caminar":
+			animacion.scale = escala_base * factor_escala_caminar
+		elif anim_final == "caminar_cargando":
+			animacion.scale = escala_base * factor_escala_caminar_cargando
+		else:
+			animacion.scale = escala_base
+			
+		if animacion.animation != anim_final or not animacion.is_playing():
+			animacion.play(anim_final)
 
 func _actualizar_lado_platos(signo: float) -> void:
 	var pos_x := absf(offset_x_platos) * signo
@@ -120,5 +147,4 @@ func cambiar_estado_visual(estado: EstadoVisual, texto: String = "") -> void:
 			plato_sucio_2.visible = true
 			plato_sucio_3.visible = true
 			
-	# Actualiza la pose al instante aunque el mesero esté quieto frente a la cocina o mesa
 	_reproducir_animacion("caminar" if moviendose else "quieto")

@@ -2,14 +2,40 @@
 
 [ext_resource type="Script" uid="uid://cuxrj841sca4n" path="res://scripts/ui/mesero.gd" id="1_rm7cv"]
 [ext_resource type="Texture2D" uid="uid://mi8gt7d77kse" path="res://assets/sprites/buho_quieto.png" id="2_qopr8"]
+[ext_resource type="Texture2D" uid="uid://bcj1clvy4shdv" path="res://assets/sprites/buho_caminar_1.png" id="2_ujrrm"]
 [ext_resource type="Texture2D" uid="uid://bgntt8usjmht3" path="res://assets/sprites/plato_comida.png" id="3_kjnv1"]
 [ext_resource type="Texture2D" uid="uid://dmydnej1tw752" path="res://assets/sprites/buho_ala_levantada.png" id="3_s1o6c"]
+[ext_resource type="Texture2D" uid="uid://67rnsln0qtrd" path="res://assets/sprites/buho_caminar_2.png" id="3_ud5pj"]
+[ext_resource type="Texture2D" uid="uid://duag6tjwxwam2" path="res://assets/sprites/buho_caminando_ala_levantada_2.png" id="4_8gtxq"]
 [ext_resource type="Texture2D" uid="uid://bs3tteprub1rc" path="res://assets/sprites/Plato_sucio.png" id="4_s1o6c"]
+[ext_resource type="Texture2D" uid="uid://dryr13necfuwj" path="res://assets/sprites/buho_caminando_ala_levantada_1.png" id="5_cewxj"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u5bk5"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_u5bk5"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ujrrm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ud5pj")
+}],
+"loop": 1,
+"name": &"caminar",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_cewxj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_8gtxq")
+}],
+"loop": 1,
+"name": &"caminar_cargando",
+"speed": 8.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("2_qopr8")
@@ -41,7 +67,6 @@ sprite_frames = SubResource("SpriteFrames_u5bk5")
 animation = &"quieto"
 
 [node name="PlatoComida" type="Sprite2D" parent="AnimatedSprite2D" unique_id=1713445330]
-visible = false
 position = Vector2(174.99998, -99.99999)
 scale = Vector2(0.356, 0.294)
 texture = ExtResource("3_kjnv1")
