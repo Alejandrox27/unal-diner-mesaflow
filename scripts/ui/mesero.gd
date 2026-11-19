@@ -7,28 +7,24 @@ enum EstadoVisual { LIBRE, CON_COMIDA, SUCIOS_1, SUCIOS_2, SUCIOS_3 }
 
 @export var velocidad: float = 360.0
 
-# Ranuras listas para arrastrar los sprites reales (.png) en el Inspector cuando los tengan
-@export_group("Sprites del Mesero")
-@export var textura_libre: Texture2D
-@export var textura_con_comida: Texture2D
-@export var textura_1_plato_sucio: Texture2D
-@export var textura_2_platos_sucios: Texture2D
-@export var textura_3_platos_sucios: Texture2D
-
-@onready var cuerpo_visual: ColorRect = $Cuerpo
-@onready var sprite_personaje: Sprite2D = $SpritePersonaje
-@onready var plato_1: ColorRect = $Plato1
-@onready var plato_2: ColorRect = $Plato2
-@onready var plato_3: ColorRect = $Plato3
+@onready var animacion: AnimatedSprite2D = $AnimatedSprite2D
+@onready var plato_comida: Sprite2D = $AnimatedSprite2D/PlatoComida
+@onready var plato_sucio_1: Sprite2D = $AnimatedSprite2D/PlatoSucio1
+@onready var plato_sucio_2: Sprite2D = $AnimatedSprite2D/PlatoSucio2
+@onready var plato_sucio_3: Sprite2D = $AnimatedSprite2D/PlatoSucio3
 @onready var etiqueta_mano: Label = $EtiquetaMano
 
 var destino: Vector2
 var moviendose: bool = false
 var accion_pendiente: Dictionary = {}
+var offset_x_platos: float = 0.0
+var esta_cargando: bool = false
 
 func _ready() -> void:
 	destino = global_position
+	offset_x_platos = plato_comida.position.x
 	cambiar_estado_visual(EstadoVisual.LIBRE, "Manos libres")
+	_reproducir_animacion("quieto")
 
 func ir_a(punto: Vector2, accion: Dictionary = {}) -> void:
 	destino = punto
@@ -37,6 +33,7 @@ func ir_a(punto: Vector2, accion: Dictionary = {}) -> void:
 
 func _physics_process(_delta: float) -> void:
 	if not moviendose:
+		_reproducir_animacion("quieto")
 		return
 		
 	var distancia := global_position.distance_to(destino)
@@ -44,6 +41,7 @@ func _physics_process(_delta: float) -> void:
 		global_position = destino
 		velocity = Vector2.ZERO
 		moviendose = false
+		_reproducir_animacion("quieto")
 		var accion_ejecutar := accion_pendiente.duplicate()
 		accion_pendiente.clear()
 		if not accion_ejecutar.is_empty():
@@ -51,54 +49,76 @@ func _physics_process(_delta: float) -> void:
 	else:
 		var direccion := global_position.direction_to(destino)
 		velocity = direccion * velocidad
+		_actualizar_orientacion_y_animacion(direccion)
 		move_and_slide()
 
-func cambiar_estado_visual(estado: EstadoVisual, texto: String) -> void:
-	etiqueta_mano.text = texto
+func _actualizar_orientacion_y_animacion(direccion: Vector2) -> void:
+	if abs(direccion.x) >= abs(direccion.y):
+		if direccion.x < 0:
+			animacion.flip_h = true
+			_actualizar_lado_platos(-1.0)
+		elif direccion.x > 0:
+			animacion.flip_h = false
+			_actualizar_lado_platos(1.0)
+		_reproducir_animacion("caminar")
+	else:
+		if direccion.y < 0:
+			_reproducir_animacion("caminar_arriba")
+		else:
+			_reproducir_animacion("caminar_abajo")
+
+func _reproducir_animacion(base: String) -> void:
+	if not animacion.sprite_frames:
+		return
+		
+	# Si lleva platos, busca primero la versión "_cargando" (ej. "quieto_cargando")
+	var nombre_objetivo := base + "_cargando" if esta_cargando else base
 	
-	var usa_sprites := (textura_libre != null)
-	cuerpo_visual.visible = not usa_sprites
-	sprite_personaje.visible = usa_sprites
+	if animacion.sprite_frames.has_animation(nombre_objetivo):
+		if animacion.animation != nombre_objetivo or not animacion.is_playing():
+			animacion.play(nombre_objetivo)
+	elif animacion.sprite_frames.has_animation(base):
+		if animacion.animation != base or not animacion.is_playing():
+			animacion.play(base)
+	else:
+		var fallback := "quieto_cargando" if (esta_cargando and animacion.sprite_frames.has_animation("quieto_cargando")) else "quieto"
+		if animacion.sprite_frames.has_animation(fallback) and animacion.animation != fallback:
+			animacion.play(fallback)
+
+func _actualizar_lado_platos(signo: float) -> void:
+	var pos_x := absf(offset_x_platos) * signo
+	plato_comida.position.x = pos_x
+	plato_sucio_1.position.x = pos_x
+	plato_sucio_2.position.x = pos_x
+	plato_sucio_3.position.x = pos_x
+
+func cambiar_estado_visual(estado: EstadoVisual, texto: String = "") -> void:
+	if etiqueta_mano:
+		etiqueta_mano.text = texto
+	
+	plato_comida.visible = false
+	plato_sucio_1.visible = false
+	plato_sucio_2.visible = false
+	plato_sucio_3.visible = false
 	
 	match estado:
 		EstadoVisual.LIBRE:
-			cuerpo_visual.color = Color(0.95, 0.80, 0.20)
-			plato_1.visible = false
-			plato_2.visible = false
-			plato_3.visible = false
-			if textura_libre: sprite_personaje.texture = textura_libre
-			
+			esta_cargando = false
 		EstadoVisual.CON_COMIDA:
-			cuerpo_visual.color = Color(0.95, 0.45, 0.15)
-			plato_1.visible = not usa_sprites
-			plato_1.color = Color(0.20, 0.85, 0.40)
-			plato_2.visible = false
-			plato_3.visible = false
-			if textura_con_comida: sprite_personaje.texture = textura_con_comida
-			
+			esta_cargando = true
+			plato_comida.visible = true
 		EstadoVisual.SUCIOS_1:
-			cuerpo_visual.color = Color(0.60, 0.45, 0.32)
-			plato_1.visible = not usa_sprites
-			plato_1.color = Color(0.88, 0.88, 0.88)
-			plato_2.visible = false
-			plato_3.visible = false
-			if textura_1_plato_sucio: sprite_personaje.texture = textura_1_plato_sucio
-			
+			esta_cargando = true
+			plato_sucio_1.visible = true
 		EstadoVisual.SUCIOS_2:
-			cuerpo_visual.color = Color(0.48, 0.34, 0.22)
-			plato_1.visible = not usa_sprites
-			plato_1.color = Color(0.88, 0.88, 0.88)
-			plato_2.visible = not usa_sprites
-			plato_2.color = Color(0.78, 0.78, 0.78)
-			plato_3.visible = false
-			if textura_2_platos_sucios: sprite_personaje.texture = textura_2_platos_sucios
-			
+			esta_cargando = true
+			plato_sucio_1.visible = true
+			plato_sucio_2.visible = true
 		EstadoVisual.SUCIOS_3:
-			cuerpo_visual.color = Color(0.35, 0.22, 0.14) # Café oscuro: pila llena (3/3)
-			plato_1.visible = not usa_sprites
-			plato_1.color = Color(0.88, 0.88, 0.88)
-			plato_2.visible = not usa_sprites
-			plato_2.color = Color(0.78, 0.78, 0.78)
-			plato_3.visible = not usa_sprites
-			plato_3.color = Color(0.68, 0.68, 0.68)
-			if textura_3_platos_sucios: sprite_personaje.texture = textura_3_platos_sucios
+			esta_cargando = true
+			plato_sucio_1.visible = true
+			plato_sucio_2.visible = true
+			plato_sucio_3.visible = true
+			
+	# Actualiza la pose al instante aunque el mesero esté quieto frente a la cocina o mesa
+	_reproducir_animacion("caminar" if moviendose else "quieto")

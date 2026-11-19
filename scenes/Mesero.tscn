@@ -1,8 +1,31 @@
 [gd_scene format=3 uid="uid://cjqteyqvhmuu6"]
 
 [ext_resource type="Script" uid="uid://cuxrj841sca4n" path="res://scripts/ui/mesero.gd" id="1_rm7cv"]
+[ext_resource type="Texture2D" uid="uid://mi8gt7d77kse" path="res://assets/sprites/buho_quieto.png" id="2_qopr8"]
+[ext_resource type="Texture2D" uid="uid://bgntt8usjmht3" path="res://assets/sprites/plato_comida.png" id="3_kjnv1"]
+[ext_resource type="Texture2D" uid="uid://dmydnej1tw752" path="res://assets/sprites/buho_ala_levantada.png" id="3_s1o6c"]
+[ext_resource type="Texture2D" uid="uid://bs3tteprub1rc" path="res://assets/sprites/Plato_sucio.png" id="4_s1o6c"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u5bk5"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u5bk5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_qopr8")
+}],
+"loop": 1,
+"name": &"quieto",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_s1o6c")
+}],
+"loop": 1,
+"name": &"quieto_cargando",
+"speed": 5.0
+}]
 
 [node name="Mesero" type="CharacterBody2D" unique_id=967395656]
 script = ExtResource("1_rm7cv")
@@ -10,32 +33,43 @@ script = ExtResource("1_rm7cv")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=64432686]
 shape = SubResource("CircleShape2D_u5bk5")
 
-[node name="Cuerpo" type="ColorRect" parent="." unique_id=247122565]
-offset_left = -18.0
-offset_top = -18.0
-offset_right = 18.0
-offset_bottom = 18.0
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1345590505]
+texture_filter = 1
+position = Vector2(0, -20)
+scale = Vector2(0.24, 0.24)
+sprite_frames = SubResource("SpriteFrames_u5bk5")
+animation = &"quieto"
+
+[node name="PlatoComida" type="Sprite2D" parent="AnimatedSprite2D" unique_id=1713445330]
+visible = false
+position = Vector2(174.99998, -99.99999)
+scale = Vector2(0.356, 0.294)
+texture = ExtResource("3_kjnv1")
+
+[node name="PlatoSucio1" type="Sprite2D" parent="AnimatedSprite2D" unique_id=16864448]
+visible = false
+texture_filter = 1
+position = Vector2(174.99998, -104.16666)
+scale = Vector2(0.35399997, 0.294)
+texture = ExtResource("4_s1o6c")
+
+[node name="PlatoSucio2" type="Sprite2D" parent="AnimatedSprite2D" unique_id=97457135]
+visible = false
+texture_filter = 1
+position = Vector2(174.99998, -112.5)
+scale = Vector2(0.35399997, 0.294)
+texture = ExtResource("4_s1o6c")
+
+[node name="PlatoSucio3" type="Sprite2D" parent="AnimatedSprite2D" unique_id=1532533058]
+visible = false
+texture_filter = 1
+position = Vector2(175, -120.83333)
+scale = Vector2(0.35399997, 0.294)
+texture = ExtResource("4_s1o6c")
 
 [node name="EtiquetaMano" type="Label" parent="." unique_id=751689679]
-offset_left = -75.0
-offset_top = -45.0
-offset_right = 75.0
-offset_bottom = -20.0
+offset_left = -65.0
+offset_top = -90.0
+offset_right = 85.0
+offset_bottom = -65.0
 horizontal_alignment = 1
-
-[node name="SpritePersonaje" type="Sprite2D" parent="." unique_id=1587283995]
-
-[node name="Plato1" type="ColorRect" parent="." unique_id=1128247661]
-offset_right = 14.0
-offset_bottom = 8.0
-offset_transform_position = Vector2(20, -6)
-
-[node name="Plato2" type="ColorRect" parent="." unique_id=2021742818]
-offset_right = 14.0
-offset_bottom = 8.0
-offset_transform_position = Vector2(20, -16)
-
-[node name="Plato3" type="ColorRect" parent="." unique_id=679114837]
-offset_right = 14.0
-offset_bottom = 8.0
-offset_transform_position = Vector2(20, -26)
