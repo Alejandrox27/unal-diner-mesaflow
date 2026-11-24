@@ -43,6 +43,8 @@ var nivel_perdido: bool = false
 var juego_completado: bool = false
 
 var plato_en_mano_mesa: Mesa = null
+var comensal_escoltado: Comensal = null
+var mesa_escolta_destino: Mesa = null
 
 var nombres_unal := ["Camila", "Andrés", "Valentina", "Mateo", "Sofía", "Julián", "Daniela", "Sebastián", "Laura", "David"]
 
@@ -59,7 +61,7 @@ func _ready() -> void:
 	_cargar_nivel(0)
 
 func _unhandled_input(event: InputEvent) -> void:
-	if nivel_perdido or juego_completado:
+	if nivel_perdido or juego_completado or comensal_escoltado != null:
 		return
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		var pos_clic := get_global_mouse_position()
@@ -83,6 +85,8 @@ func _cargar_nivel(indice: int) -> void:
 	pila_undo = PilaLIFO.new()
 	mesas_rr = ColaCircular.new(config["mesas"])
 	plato_en_mano_mesa = null
+	comensal_escoltado = null
+	mesa_escolta_destino = null
 	_actualizar_apariencia_mesero()
 	
 	for hijo in contenedor_mesas.get_children():
@@ -105,7 +109,6 @@ func _cargar_nivel(indice: int) -> void:
 		
 		var angulo := (TAU / total_mesas) * (i - 1) - (PI / 2.0)
 		var posicion_mesa := centro_salon + Vector2(cos(angulo) * radio_x, sin(angulo) * radio_y)
-		# Centrado dinámico según el nuevo tamaño que le diste en el Inspector
 		vista_mesa.position = posicion_mesa - (vista_mesa.size * 0.5)
 		
 		mesas_visuales.append(vista_mesa)
@@ -203,10 +206,10 @@ func _reconstruir_fila_visual() -> void:
 		tarjeta.actualizar_vista(c, i == 0)
 		fila_visuales.append(tarjeta)
 
-# --- CLICS EN ZONAS DEL MAPA ---
+# --- CLICS EN ZONAS DEL MAPA (BLOQUEADOS MIENTRAS SE ESCOLTA UN CLIENTE) ---
 
 func _on_clic_puerta() -> void:
-	if nivel_perdido or juego_completado:
+	if nivel_perdido or juego_completado or comensal_escoltado != null:
 		return
 	if plato_en_mano_mesa != null or not pila_loza_mano.esta_vacia():
 		return
@@ -214,7 +217,7 @@ func _on_clic_puerta() -> void:
 	mesero.ir_a(punto_puerta, {"tipo": "PUERTA"})
 
 func _on_clic_cocina() -> void:
-	if nivel_perdido or juego_completado:
+	if nivel_perdido or juego_completado or comensal_escoltado != null:
 		return
 	if plato_en_mano_mesa != null or not pila_loza_mano.esta_vacia():
 		return
@@ -222,13 +225,15 @@ func _on_clic_cocina() -> void:
 	mesero.ir_a(punto_cocina, {"tipo": "COCINA"})
 
 func _on_clic_lavaplatos() -> void:
-	if nivel_perdido or juego_completado:
+	if nivel_perdido or juego_completado or comensal_escoltado != null:
+		return
+	if pila_loza_mano.esta_vacia():
 		return
 	var punto_lavaplatos: Vector2 = $ZonaLavaplatos.global_position + Vector2(-25, 65)
 	mesero.ir_a(punto_lavaplatos, {"tipo": "LAVAPLATOS"})
 
 func _on_clic_mesa(mesa: Mesa, punto_atencion: Vector2) -> void:
-	if nivel_perdido or juego_completado:
+	if nivel_perdido or juego_completado or comensal_escoltado != null:
 		return
 	mesero.ir_a(punto_atencion, {"tipo": "MESA", "mesa": mesa})
 
@@ -250,7 +255,7 @@ func _on_mesero_llego_a_destino(accion: Dictionary) -> void:
 			_ejecutar_lavar_loza()
 
 func _ejecutar_recibir_en_puerta() -> void:
-	if fila_entrada.esta_vacia():
+	if comensal_escoltado != null or fila_entrada.esta_vacia():
 		return
 		
 	var mesa_elegida: Mesa = null
@@ -266,15 +271,21 @@ func _ejecutar_recibir_en_puerta() -> void:
 	var estudiante: Comensal = fila_entrada.desencolar()
 	_reconstruir_fila_visual()
 	
+	comensal_escoltado = estudiante
+	mesa_escolta_destino = mesa_elegida
+	_actualizar_apariencia_mesero()
+	
 	var idx := mesas_datos.find(mesa_elegida)
 	var vista := mesas_visuales[idx]
 	var punto_mesa := vista.global_position + Vector2(vista.size.x * 0.5, vista.size.y + 28.0)
 	
-	mesero.cambiar_estado_visual(Mesero.EstadoVisual.LIBRE, "Con: " + estudiante.nombre)
 	mesero.ir_a(punto_mesa, {"tipo": "ESCOLTAR", "mesa": mesa_elegida, "comensal": estudiante})
 
 func _ejecutar_sentar_en_mesa(mesa: Mesa, estudiante: Comensal) -> void:
+	comensal_escoltado = null
+	mesa_escolta_destino = null
 	_actualizar_apariencia_mesero()
+	
 	if mesa.estado != Mesa.Estado.LIBRE:
 		fila_entrada.encolar(estudiante)
 		_reconstruir_fila_visual()
@@ -346,7 +357,9 @@ func _ejecutar_lavar_loza() -> void:
 	_refrescar_hud()
 
 func _actualizar_apariencia_mesero() -> void:
-	if plato_en_mano_mesa != null:
+	if comensal_escoltado != null:
+		mesero.cambiar_estado_visual(Mesero.EstadoVisual.LIBRE, "Con: " + comensal_escoltado.nombre)
+	elif plato_en_mano_mesa != null:
 		mesero.cambiar_estado_visual(Mesero.EstadoVisual.CON_COMIDA, "Plato -> Mesa #%d" % plato_en_mano_mesa.numero)
 	elif pila_loza_mano.tamanio() == 1:
 		mesero.cambiar_estado_visual(Mesero.EstadoVisual.SUCIOS_1, "Loza sucia (1/3)")
@@ -358,7 +371,7 @@ func _actualizar_apariencia_mesero() -> void:
 		mesero.cambiar_estado_visual(Mesero.EstadoVisual.LIBRE, "Manos libres")
 
 func _on_deshacer_presionado() -> void:
-	if nivel_perdido or juego_completado or pila_undo.esta_vacia() or plato_en_mano_mesa != null:
+	if nivel_perdido or juego_completado or pila_undo.esta_vacia() or plato_en_mano_mesa != null or comensal_escoltado != null:
 		return
 	var ultimo: Dictionary = pila_undo.desapilar()
 	
