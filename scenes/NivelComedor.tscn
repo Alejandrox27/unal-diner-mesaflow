@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://c1rd2r8eo605q" path="res://scripts/services/GestorComedor.gd" id="1_y5xhu"]
 [ext_resource type="PackedScene" uid="uid://cjqteyqvhmuu6" path="res://scenes/Mesero.tscn" id="2_3mdyf"]
+[ext_resource type="AudioStream" uid="uid://cymnv1mw20l8l" path="res://assets/audio/MUSICA_INGAME.mp3" id="3_2ts2s"]
+[ext_resource type="AudioStream" uid="uid://bvvvrdos5g6rt" path="res://assets/audio/efecto-sonido-efectuar-comida.wav" id="4_kv5xa"]
+[ext_resource type="AudioStream" uid="uid://cpndcvrsorfvw" path="res://assets/audio/recoger_plato_comida.wav" id="5_dg4hp"]
 
 [node name="NivelComedor" type="Node2D" unique_id=329179824]
 script = ExtResource("1_y5xhu")
@@ -72,3 +75,14 @@ offset_right = 716.0
 offset_bottom = 360.0
 text = "¡TIEMPO AGOTADO!
 Clic para reintentar nivel"
+
+[node name="MusicaComedor" type="AudioStreamPlayer" parent="." unique_id=935864256]
+stream = ExtResource("3_2ts2s")
+volume_db = -6.0
+autoplay = true
+
+[node name="SfxServir" type="AudioStreamPlayer" parent="." unique_id=755417214]
+stream = ExtResource("4_kv5xa")
+
+[node name="SfxTomarPlato" type="AudioStreamPlayer" parent="." unique_id=1467842710]
+stream = ExtResource("5_dg4hp")

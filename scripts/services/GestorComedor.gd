@@ -27,6 +27,8 @@ var mesas_rr: ColaCircular
 @onready var label_estado: Label = $LabelEstado
 @onready var btn_reintentar: Button = $BtnReintentar
 @onready var mesero: Mesero = $Mesero
+@onready var sfx_servir: AudioStreamPlayer = $SfxServir
+@onready var sfx_tomar_plato: AudioStreamPlayer = $SfxTomarPlato
 
 var nivel_actual: int = 0
 var mesas_datos: Array[Mesa] = []
@@ -304,12 +306,14 @@ func _ejecutar_tomar_pedido_cocina() -> void:
 		var mesa_prioritaria: Mesa = pedidos_cocina.desencolar()
 		if mesa_prioritaria.estado == Mesa.Estado.OCUPADA:
 			plato_en_mano_mesa = mesa_prioritaria
+			sfx_tomar_plato.play()
 			_actualizar_apariencia_mesero()
 			_actualizar_todas_las_mesas()
 			return
 
 func _ejecutar_interaccion_mesa(mesa: Mesa) -> void:
 	if plato_en_mano_mesa == mesa and mesa.estado == Mesa.Estado.OCUPADA:
+		sfx_servir.play()
 		var c: Comensal = mesa.comensal_actual
 		var puntos_ganados := 150 if c.prioridad == 0 else 100
 		puntaje += puntos_ganados

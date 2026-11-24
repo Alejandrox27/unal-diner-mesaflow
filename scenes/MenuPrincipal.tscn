@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://bmgxiunmun3hl" path="res://assets/MesasPrueba.png" id="3_cjknc"]
 [ext_resource type="Texture2D" uid="uid://o5j6jagbcvgd" path="res://icon.svg" id="4_f5jwn"]
 [ext_resource type="FontFile" uid="uid://b4bbbro7mbquu" path="res://assets/fonts/PressStart2P-Regular.ttf" id="5_f5jwn"]
+[ext_resource type="AudioStream" uid="uid://8hrqcyfuq8bi" path="res://assets/audio/MUSICA_INICIO.mp3" id="6_4o3yp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ytrl"]
 bg_color = Color(0.972549, 0.5019608, 0, 1)
@@ -87,6 +88,32 @@ corner_radius_bottom_left = 6
 anti_aliasing = false
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f5jwn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ed4b7"]
+bg_color = Color(0.96491176, 0, 0.1564219, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.6825543, 0.18697727, 0.09769296, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jmig2"]
+bg_color = Color(0.4190964, 0.12547716, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xkvsj"]
+bg_color = Color(0.8809511, 0.46892917, 0.34967023, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="MenuPrincipal" type="Control" unique_id=190292713]
 layout_mode = 3
@@ -194,6 +221,9 @@ offset_left = 916.0
 offset_top = 15.0
 offset_right = 1036.0
 offset_bottom = 50.0
+theme_override_styles/normal = SubResource("StyleBoxFlat_ed4b7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jmig2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xkvsj")
 text = "X CERRAR"
 
 [node name="LabelContador" type="Label" parent="OverlayTutorial" unique_id=771756689]
@@ -204,3 +234,8 @@ offset_right = 626.0
 offset_bottom = 615.0
 text = "1 / 3"
 horizontal_alignment = 1
+
+[node name="MusicaMenu" type="AudioStreamPlayer" parent="." unique_id=293849479]
+stream = ExtResource("6_4o3yp")
+volume_db = -6.0
+autoplay = true
